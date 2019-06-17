@@ -1,0 +1,20 @@
+{
+  "name": "@passoa/websocket",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dts-gen":"dts-gen -m websocket",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pass0a/websocket.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pass0a/websocket/issues"
+  },
+  "homepage": "https://github.com/pass0a/websocket#readme"
+}
