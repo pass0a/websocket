@@ -1,4 +1,4 @@
-function Server(arguments) {
+function Server() {
 	var s;
 	var fconnect;
 	var crypto = require('crypto');
