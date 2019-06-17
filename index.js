@@ -1,4 +1,4 @@
-function Server() {
+function Server(fconnect) {
 	var s;
 	var fconnect;
 	var crypto = require('crypto');
@@ -133,14 +133,14 @@ function Server() {
 			s.on('close', function() {
 				s = undefined;
 			});
-			fconnect(this);
+			if ('function' == typeof fconnect) {
+				fconnect(this);
+			}
 		}
 	};
-	if ('function' == typeof arguments[0]) {
-		fconnect = arguments[0];
-	}
+	
 }
-exports.createServer = function() {
+exports.createServer = function(fn) {
 	//console.log("[test] websocket.createServer");
-	return new Server(arguments);
+	return new Server(fn);
 };
