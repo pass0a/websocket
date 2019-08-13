@@ -79,14 +79,13 @@ function Server(fconnect) {
 			);
 		}
 		// 返回头部分和数据部分的合并缓冲区
-		return Buffer.concat([ new Buffer(head), body ]);
+		return Buffer.concat([ Buffer.from(head), body ]);
 	};
 	this.on = function(name, fp) {
 		ev[name] = fp;
 	};
 	function onData(buf) {
-		console.log('onData-1:', buf.length);
-		buffer = Buffer.concat([ buffer, buf ]);
+		buffer = Buffer.concat([ buffer, Buffer.from(buf) ]);
 		var frm;
 		while ((frm = this.decodeDataFrame(buffer))) {
 			console.log(frm.PayloadLength);
@@ -138,7 +137,6 @@ function Server(fconnect) {
 			}
 		}
 	};
-	
 }
 exports.createServer = function(fn) {
 	//console.log("[test] websocket.createServer");
