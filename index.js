@@ -88,11 +88,12 @@ function Server(fconnect) {
 		buffer = Buffer.concat([ buffer, Buffer.from(buf) ]);
 		var frm;
 		while ((frm = this.decodeDataFrame(buffer))) {
-			console.log(frm.PayloadLength);
+			console.log('onData:', frm.PayloadLength);
 			ev['data'](frm);
 		}
 	}
 	this.write = function(buf) {
+		console.log(buf);
 		if (s) {
 			var frm = { FIN: 1 };
 			switch (buf.constructor.name) {
@@ -115,19 +116,20 @@ function Server(fconnect) {
 		}
 	};
 	this.filter = function(req, res) {
-		if (req.getHeader('Upgrade') == 'websocket') {
-			var key = req.getHeader('Sec-WebSocket-Key');
+		if (req.getHeader('upgrade') == 'websocket') {
+			var key = req.getHeader('sec-websocket-key');
 			key = crypto.createHash('sha1').update(key + WS).digest('base64');
 			var head = {
-				Upgrade: 'websocket',
+				Upgrade: 'WebSocket',
 				Connection: 'Upgrade',
 				'Sec-WebSocket-Accept': key
 			};
-			if (req.getHeader('Sec-WebSocket-Protocol') != undefined) {
-				head['Sec-WebSocket-Protocol'] = req.getHeader('Sec-WebSocket-Protocol');
+			if (req.getHeader('sec-websocket-protocol') != undefined) {
+				head['Sec-WebSocket-Protocol'] = req.getHeader('sec-websocket-protocol');
 			}
 			res.writeHead(101, head);
 			s = req.toSession();
+			s.removeAllListeners('data');
 			s.on('data', onData.bind(this));
 			s.on('close', function() {
 				s = undefined;

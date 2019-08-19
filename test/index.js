@@ -3,7 +3,7 @@ var http = require('http');
 
 var wss = ws.createServer(function(c) {
 	c.on('data', function(frm) {
-		c.write(frm.PayloadData);
+		c.write(new TextDecoder().decode(frm.PayloadData));
 	});
 });
 hp = http.createServer(function(req, res) {
