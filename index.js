@@ -88,12 +88,10 @@ function Server(fconnect) {
 		buffer = Buffer.concat([ buffer, Buffer.from(buf) ]);
 		var frm;
 		while ((frm = this.decodeDataFrame(buffer))) {
-			console.log('onData:', frm.PayloadLength);
 			ev['data'](frm);
 		}
 	}
 	this.write = function(buf) {
-		console.log(buf);
 		if (s) {
 			var frm = { FIN: 1 };
 			switch (buf.constructor.name) {
@@ -141,6 +139,5 @@ function Server(fconnect) {
 	};
 }
 exports.createServer = function(fn) {
-	//console.log("[test] websocket.createServer");
 	return new Server(fn);
 };
