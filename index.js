@@ -24,8 +24,7 @@ function Server(fconnect) {
 		if (frame.PayloadLength === 126) {
 			if (buffer.length < 5) return false;
 			frame.PayloadLength = (buffer[i++] << 8) + buffer[i++];
-		}
-		if (frame.PayloadLength === 127) {
+		} else if (frame.PayloadLength === 127) {
 			// 长度一般用四字节的整型，前四个字节通常为长整形留空的
 			if (buffer.length < 11) return false;
 			i += 4;
