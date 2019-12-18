@@ -2,6 +2,7 @@ function Server(fconnect) {
 	var s;
 	var fconnect;
 	var crypto = require('crypto');
+	var util = require('util');
 	var WS = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
 	var stream;
 	var ev = [];
@@ -93,20 +94,15 @@ function Server(fconnect) {
 	this.write = function(buf) {
 		if (s) {
 			var frm = { FIN: 1 };
-			switch (buf.constructor.name) {
-				case 'Uint8Array':
-				case 'Buffer':
-					frm.Opcode = 2;
-					frm.PayloadData = buf;
-					break;
-				case 'String':
-					frm.Opcode = 1;
-					frm.PayloadData = buf;
-					break;
-				default:
-					frm.Opcode = 1;
-					frm.PayloadData = JSON.stringify(buf);
-					break;
+			if (util.isBuffer(buf) || util.types.isTypedArray(buf)) {
+				frm.Opcode = 2;
+				frm.PayloadData = buf;
+			} else if (util.isString(buf)) {
+				frm.Opcode = 1;
+				frm.PayloadData = buf;
+			} else {
+				frm.Opcode = 1;
+				frm.PayloadData = JSON.stringify(buf);
 			}
 			var data = this.encodeDataFrame(frm);
 			s.write(data);
